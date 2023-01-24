@@ -33,37 +33,12 @@ Resources:
     Properties:
       SubnetId: !Ref WebSubnet
       RouteTableId: !Ref WebRouteTable
-  WebSecGroup:
-    Type: AWS::EC2::SecurityGroup
-    Properties:
-      GroupName: Web-SG
-      GroupDescription: Security Group for Web Server
-      VpcId: !Ref WebVPC
-      SecurityGroupIngress:
-        - IpProtocol: tcp
-          FromPort: 80
-          ToPort: 80
-          CidrIp: 0.0.0.0/0
-        - IpProtocol: tcp
-          FromPort: 22
-          ToPort: 22
-          CidrIp: 0.0.0.0/0
-  WebKeyPair:
-    Type: 'AWS::EC2::KeyPair'
-    Properties:
-      KeyName: web-keypair
-  WebInstance:
-    Type: AWS::EC2::Instance
-    Properties:
-      KeyName: !Ref WebKeyPair
-      DisableApiTermination: false
-      ImageId: ami-0bba69335379e17f8
-      InstanceType: t2.micro
-      # Basic monitoring only
-      Monitoring: false
-      NetworkInterfaces:
-        - AssociatePublicIpAddress: "true"
-          DeviceIndex: "0"
-          SubnetId: !Ref WebSubnet
-          GroupSet:
-          - !Ref WebSecGroup
+Outputs:
+  VPC:
+    Value: !Ref WebVPC
+    Export: 
+      Name: VPCID
+  Subnet:
+    Value: !Ref WebSubnet
+    Export:
+      Name: SubnetID

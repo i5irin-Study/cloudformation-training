@@ -1,0 +1,17 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Resources:
+  WebInstance:
+    Type: AWS::EC2::Instance
+    Properties:
+      KeyName: !ImportValue KeyPairName
+      DisableApiTermination: false
+      ImageId: ami-0bba69335379e17f8
+      InstanceType: t2.micro
+      # Basic monitoring only
+      Monitoring: false
+      NetworkInterfaces:
+        - AssociatePublicIpAddress: "true"
+          DeviceIndex: "0"
+          SubnetId: !ImportValue SubnetID
+          GroupSet:
+          - !ImportValue SecurityGroupID

@@ -1,0 +1,23 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Parameters:
+  TemplateNetwork:
+    Type: String
+  TemplateSecurity:
+    Type: String
+  TemplateApplication:
+    Type: String
+Resources:
+  Network:
+    Type: AWS::CloudFormation::Stack
+    Properties:
+      TemplateURL: !Ref TemplateNetwork
+  Security:
+    Type: AWS::CloudFormation::Stack
+    Properties:
+      TemplateURL: !Ref TemplateSecurity
+    DependsOn: Network
+  Application:
+    Type: AWS::CloudFormation::Stack
+    Properties:
+      TemplateURL: !Ref TemplateApplication
+    DependsOn: Security
