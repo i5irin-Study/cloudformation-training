@@ -20,3 +20,7 @@ aws cloudformation deploy \
       TemplateSecurity="your-bucket-url/security.yml" \
       TemplateApplication="your-bucket-url/application.yml"
 ```
+
+```
+ansible-playbook -i ansible/inventory/hosts.yml ansible/setup.yml
+```

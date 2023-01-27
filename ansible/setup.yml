@@ -1,0 +1,26 @@
+- name: Cloud Formation Training
+  hosts: web
+  tasks:
+    - name: install Apache
+      become: yes
+      yum:
+        name: httpd
+    - name: start and enable Apache
+      become: yes
+      service:
+        name: httpd
+        state: started
+        enabled: yes
+        daemon_reload: yes
+    - name: install PHP
+      become: true
+      yum:
+        name: php
+      notify:
+        - httpd module changed
+  handlers:
+    - name: httpd module changed
+      become: yes
+      service:
+        name: httpd
+        state: restarted
