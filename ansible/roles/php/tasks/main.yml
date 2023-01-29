@@ -1,0 +1,7 @@
+---
+- name: install PHP
+  become: true
+  yum:
+    name: php
+  notify:
+    - httpd module changed

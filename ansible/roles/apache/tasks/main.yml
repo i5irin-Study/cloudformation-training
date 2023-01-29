@@ -1,0 +1,12 @@
+---
+- name: install Apache
+  become: yes
+  yum:
+    name: httpd
+- name: start and enable Apache
+  become: yes
+  service:
+    name: httpd
+    state: started
+    enabled: yes
+    daemon_reload: yes
