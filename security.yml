@@ -19,6 +19,17 @@ Resources:
     Type: AWS::EC2::KeyPair
     Properties:
       KeyName: web-keypair
+  DBSecGroup:
+    Type: AWS::EC2::SecurityGroup
+    Properties:
+      GroupName: DB-SG
+      GroupDescription: Security Group for DB Server
+      VpcId: !ImportValue VPCID
+      SecurityGroupIngress:
+        - IpProtocol: tcp
+          FromPort: 3306
+          ToPort: 3306
+          CidrIp: 10.0.1.0/24
 Outputs:
   SecGroup:
     Value: !Ref WebSecGroup
@@ -28,3 +39,7 @@ Outputs:
     Value: !Ref WebKeyPair
     Export: 
       Name: KeyPairName
+  DBSecGroup:
+    Value: !Ref DBSecGroup
+    Export: 
+      Name: DBSecurityGroupID

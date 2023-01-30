@@ -11,6 +11,25 @@ Resources:
       CidrBlock: 10.0.1.0/24
       MapPublicIpOnLaunch: "true"
       VpcId: !Ref WebVPC
+  DBSubnet:
+    Type: AWS::EC2::Subnet
+    Properties:
+      AvailabilityZone: ap-northeast-1a
+      CidrBlock: 10.0.2.0/24
+      VpcId: !Ref WebVPC
+  DBBackupSubnet:
+    Type: AWS::EC2::Subnet
+    Properties:
+      AvailabilityZone: ap-northeast-1c
+      CidrBlock: 10.0.4.0/24
+      VpcId: !Ref WebVPC
+  DBSubnetGroup:
+    Type: AWS::RDS::DBSubnetGroup
+    Properties:
+      DBSubnetGroupDescription: Subnet Group for DB
+      SubnetIds:
+        - !Ref DBSubnet
+        - !Ref DBBackupSubnet
   InternetGateway:
     Type: AWS::EC2::InternetGateway
   AttachGateway:
@@ -38,7 +57,11 @@ Outputs:
     Value: !Ref WebVPC
     Export: 
       Name: VPCID
-  Subnet:
+  WebSubnet:
     Value: !Ref WebSubnet
     Export:
-      Name: SubnetID
+      Name: WebSubnetID
+  DBSubnetGroup:
+    Value: !Ref DBSubnetGroup
+    Export:
+      Name: DBSubnetGroupID

@@ -12,6 +12,32 @@ Resources:
       NetworkInterfaces:
         - AssociatePublicIpAddress: "true"
           DeviceIndex: "0"
-          SubnetId: !ImportValue SubnetID
+          SubnetId: !ImportValue WebSubnetID
           GroupSet:
           - !ImportValue SecurityGroupID
+  DBPassword:
+    Type: AWS::SecretsManager::Secret
+    Properties:
+      GenerateSecretString:
+        SecretStringTemplate: '{"username": "root"}'
+        GenerateStringKey: "password"
+        PasswordLength: 16
+        ExcludeCharacters: '"@/\'
+  DB:
+    Type: AWS::RDS::DBInstance
+    DeletionPolicy: Delete
+    Properties:
+      DBInstanceIdentifier: Web-DB
+      Engine: mysql
+      EngineVersion: 8.0
+      DBInstanceClass: db.t3.micro
+      StorageType: gp2
+      AllocatedStorage: 10
+      MasterUsername: !Sub "{{resolve:secretsmanager:${DBPassword}:SecretString:username}}"
+      MasterUserPassword: !Sub "{{resolve:secretsmanager:${DBPassword}:SecretString:password}}"
+      DBName: web
+      VPCSecurityGroups:
+        - !ImportValue DBSecurityGroupID
+      DBSubnetGroupName: !ImportValue DBSubnetGroupID
+      MultiAZ: false
+      AvailabilityZone: ap-northeast-1a
