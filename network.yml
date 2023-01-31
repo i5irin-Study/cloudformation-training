@@ -11,6 +11,13 @@ Resources:
       CidrBlock: 10.0.1.0/24
       MapPublicIpOnLaunch: "true"
       VpcId: !Ref WebVPC
+  WebBackupSubnet:
+    Type: AWS::EC2::Subnet
+    Properties:
+      AvailabilityZone: ap-northeast-1c
+      CidrBlock: 10.0.3.0/24
+      MapPublicIpOnLaunch: "true"
+      VpcId: !Ref WebVPC
   DBSubnet:
     Type: AWS::EC2::Subnet
     Properties:
@@ -52,6 +59,11 @@ Resources:
     Properties:
       SubnetId: !Ref WebSubnet
       RouteTableId: !Ref WebRouteTable
+  WebBackupSubnetRouteTableAssociation:
+    Type: AWS::EC2::SubnetRouteTableAssociation
+    Properties:
+      SubnetId: !Ref WebBackupSubnet
+      RouteTableId: !Ref WebRouteTable
 Outputs:
   VPC:
     Value: !Ref WebVPC
@@ -61,6 +73,10 @@ Outputs:
     Value: !Ref WebSubnet
     Export:
       Name: WebSubnetID
+  WebBackupSubnet:
+    Value: !Ref WebBackupSubnet
+    Export:
+      Name: WebBackupSubnetID
   DBSubnetGroup:
     Value: !Ref DBSubnetGroup
     Export:

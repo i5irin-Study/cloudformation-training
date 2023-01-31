@@ -41,3 +41,32 @@ Resources:
       DBSubnetGroupName: !ImportValue DBSubnetGroupID
       MultiAZ: false
       AvailabilityZone: ap-northeast-1a
+  ALB:
+    Type: AWS::ElasticLoadBalancingV2::LoadBalancer
+    Properties:
+      Type: application
+      Scheme: internet-facing
+      IpAddressType: ipv4
+      Subnets: 
+        - !ImportValue WebSubnetID
+        - !ImportValue WebBackupSubnetID
+      SecurityGroups: 
+        - !ImportValue ALBSecurityGroupID
+  ListenerHTTP:
+    Type: AWS::ElasticLoadBalancingV2::Listener
+    Properties:
+      DefaultActions:
+        - Type: forward
+          TargetGroupArn: !Ref TargetGroup
+      LoadBalancerArn: !Ref ALB
+      Port: 80
+      Protocol: HTTP
+  TargetGroup:
+    Type: AWS::ElasticLoadBalancingV2::TargetGroup
+    Properties:
+      Port: 80
+      Protocol: HTTP
+      VpcId: !ImportValue VPCID
+      TargetType: instance
+      Targets:
+        - Id: !Ref WebInstance
