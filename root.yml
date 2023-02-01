@@ -6,6 +6,8 @@ Parameters:
     Type: String
   TemplateApplication:
     Type: String
+  SSHFromAddress:
+    Type: String
 Resources:
   Network:
     Type: AWS::CloudFormation::Stack
@@ -15,6 +17,8 @@ Resources:
     Type: AWS::CloudFormation::Stack
     Properties:
       TemplateURL: !Ref TemplateSecurity
+      Parameters:
+        SSHFromAddress: !Ref SSHFromAddress
     DependsOn: Network
   Application:
     Type: AWS::CloudFormation::Stack
