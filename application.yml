@@ -1,4 +1,7 @@
 AWSTemplateFormatVersion: '2010-09-09'
+Parameters:
+  AnsibleBucketName:
+    Type: String
 Resources:
   InstanceProfile:
     Type: AWS::IAM::InstanceProfile
@@ -21,6 +24,31 @@ Resources:
           SubnetId: !ImportValue WebSubnetID
           GroupSet:
           - !ImportValue SecurityGroupID
+  ApplyAnsiblePlaybooks:
+    Type: AWS::SSM::Association
+    Properties:
+      Name: AWS-ApplyAnsiblePlaybooks
+      WaitForSuccessTimeoutSeconds: 300
+      Targets:
+        - Key: InstanceIds
+          Values:
+            - !Ref WebInstance
+      Parameters:
+        SourceType:
+          - "S3"
+        SourceInfo:
+          - !Sub |
+            {"path": "https://${AnsibleBucketName}.s3.ap-northeast-1.amazonaws.com/ansible.zip"}
+        InstallDependencies:
+          - "True"
+        PlaybookFile:
+          - "ansible/setup.yml"
+        ExtraVariables:
+          - "SSM=True"
+        Check:
+          - "False"
+        Verbose:
+          - "-v"
   DBPassword:
     Type: AWS::SecretsManager::Secret
     Properties:

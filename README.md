@@ -20,7 +20,8 @@ aws cloudformation deploy \
       TemplateNetwork="your-bucket-url/network.yml" \
       TemplateSecurity="your-bucket-url/security.yml" \
       TemplateApplication="your-bucket-url/application.yml" \
-      SSHFromAddress="your-global-ip/32"
+      SSHFromAddress="your-global-ip/32" \
+      AnsibleBucketName="your-bucket-name"
 ```
 **Running on SSM**
 

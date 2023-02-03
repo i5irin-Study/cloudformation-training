@@ -8,6 +8,8 @@ Parameters:
     Type: String
   SSHFromAddress:
     Type: String
+  AnsibleBucketName:
+    Type: String
 Resources:
   Network:
     Type: AWS::CloudFormation::Stack
@@ -24,4 +26,6 @@ Resources:
     Type: AWS::CloudFormation::Stack
     Properties:
       TemplateURL: !Ref TemplateApplication
+      Parameters:
+        AnsibleBucketName: !Ref AnsibleBucketName
     DependsOn: Security
