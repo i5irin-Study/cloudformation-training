@@ -1,5 +1,5 @@
 - name: Cloud Formation Training
-  hosts: web
+  hosts: localhost
   roles:
     - apache
     - php

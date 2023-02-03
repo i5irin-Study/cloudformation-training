@@ -15,12 +15,27 @@ aws cloudformation validate-template --template-body file://root.yml
 aws cloudformation deploy \
     --stack-name "your-stack-name" \
     --template-file root.yml \
+    --capabilities CAPABILITY_NAMED_IAM \
     --parameter-overrides \
       TemplateNetwork="your-bucket-url/network.yml" \
       TemplateSecurity="your-bucket-url/security.yml" \
-      TemplateApplication="your-bucket-url/application.yml"
+      TemplateApplication="your-bucket-url/application.yml" \
+      SSHFromAddress="your-global-ip/32"
 ```
+**Running on SSM**
 
 ```
-ansible-playbook -i ansible/inventory/hosts.yml ansible/setup.yml
+zip -r ansible.zip ansible
+aws s3 cp ansible.zip s3://your-bucket-name/
+```
+
+Run Ansible from the AWS SSM console.
+
+**Running in local**
+
+Replace `hosts: localhost` in `ansible/setup.yml` with `hosts: web`.
+
+Execute the following commands.
+```
+ansible-playbook -i inventory/hosts.yml ansible/setup.yml
 ```

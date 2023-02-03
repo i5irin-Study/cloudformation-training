@@ -1,5 +1,10 @@
 AWSTemplateFormatVersion: '2010-09-09'
 Resources:
+  InstanceProfile:
+    Type: AWS::IAM::InstanceProfile
+    Properties:
+      Roles:
+        - !ImportValue EC2SSMRoleID
   WebInstance:
     Type: AWS::EC2::Instance
     Properties:
@@ -7,6 +12,7 @@ Resources:
       DisableApiTermination: false
       ImageId: ami-0bba69335379e17f8
       InstanceType: t2.micro
+      IamInstanceProfile: !Ref InstanceProfile
       # Basic monitoring only
       Monitoring: false
       NetworkInterfaces:

@@ -3,6 +3,21 @@ Parameters:
   SSHFromAddress:
     Type: String
 Resources:
+  EC2SSMRole:
+    Type: AWS::IAM::Role
+    Properties:
+      AssumeRolePolicyDocument:
+        Version: 2012-10-17
+        Statement:
+          - Effect: Allow
+            Principal:
+              Service:
+                - ec2.amazonaws.com
+            Action:
+              - sts:AssumeRole
+      ManagedPolicyArns: 
+        - arn:aws:iam::aws:policy/AmazonSSMManagedInstanceCore
+        - arn:aws:iam::aws:policy/AmazonS3ReadOnlyAccess
   WebSecGroup:
     Type: AWS::EC2::SecurityGroup
     Properties:
@@ -45,6 +60,10 @@ Resources:
           ToPort: 80
           CidrIp: 0.0.0.0/0
 Outputs:
+  EC2SSMRole:
+    Value: !Ref EC2SSMRole
+    Export: 
+      Name: EC2SSMRoleID
   SecGroup:
     Value: !Ref WebSecGroup
     Export: 
